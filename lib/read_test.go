@@ -50,12 +50,12 @@ func TestCSVSplitter(t *testing.T) {
 			"",
 			[]*QuestionAnswer{
 				{
-					Num:      0,
+					Num:      1,
 					Question: "q1",
 					Answer:   "a1",
 				},
 				{
-					Num:      1,
+					Num:      2,
 					Question: "q2",
 					Answer:   "a2",
 				},

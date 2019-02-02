@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// QuestionAnswer holds question number, question and answer
 type QuestionAnswer struct {
 	Num              int
 	Question, Answer string
@@ -40,7 +41,7 @@ func CSVSplitter(csv string) ([]*QuestionAnswer, error) {
 				return nil, errors.New("invalid line in csv")
 			}
 			qans = append(qans, &QuestionAnswer{
-				Num:      lineNum,
+				Num:      lineNum + 1,
 				Question: qansArray[0],
 				Answer:   qansArray[1],
 			})
