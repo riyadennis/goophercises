@@ -1,25 +1,19 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-	"os"
-	"strings"
+	"log"
+
+	"github.com/riyadennis/goophercises/lib"
 )
 
 func main() {
-	fp, err := os.Open("problems.csv")
+	fileContent, err := lib.Read("data/problems.csv")
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-	r, err := ioutil.ReadAll(fp)
+	qans, err := lib.CSVSplitter(fileContent)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-	fileString := string(r)
-	lines := strings.Split(string(fileString), "\n")
-	for i := 0; i < len(lines); i++ {
-		qans := strings.Split(lines[i], ",")
-		fmt.Printf("question: %v, answer: %v \n", qans[0], qans[1])
-	}
+	lib.WriteQuestionAnswer(qans)
 }

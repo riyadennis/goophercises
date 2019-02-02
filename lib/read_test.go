@@ -19,7 +19,7 @@ func TestRead(t *testing.T) {
 		},
 		{
 			"validFile",
-			"problems.csv",
+			"../data/problems.csv",
 			"",
 		},
 	}
