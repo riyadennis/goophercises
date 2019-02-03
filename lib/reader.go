@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"errors"
 	"os"
+	"strings"
 )
 
 // QuestionAnswer holds question number, question and answer
@@ -30,15 +31,15 @@ func NewQuestionAnswer(fileContent [][]string) ([]*QuestionAnswer, error) {
 	if fileContent == nil {
 		return nil, errors.New("invalid csv content")
 	}
-	var qans = []*QuestionAnswer{}
+	var qans = make([]*QuestionAnswer, len(fileContent))
 	for lineNum, line := range fileContent {
 		// we dont want to check empty lines
 		if line != nil {
-			qans = append(qans, &QuestionAnswer{
+			qans[lineNum] = &QuestionAnswer{
 				Num:      lineNum + 1,
 				Question: line[0],
-				Answer:   line[1],
-			})
+				Answer:   strings.TrimSpace(line[1]),
+			}
 		}
 	}
 	return qans, nil

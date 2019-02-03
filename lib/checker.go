@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"strings"
 )
 
 // CheckQuestionAnswer displays questions to the user to answer
@@ -16,7 +17,7 @@ func CheckQuestionAnswer(input io.Reader, qans []*QuestionAnswer) (int, error) {
 		if err != nil {
 			return 0, err
 		}
-		if string(answer) != q.Answer {
+		if strings.TrimSpace(string(answer)) != q.Answer {
 			points--
 			fmt.Printf("correct answer:%v \n", q.Answer)
 		}
