@@ -16,13 +16,13 @@ var fileName = flag.String("fileName",
 
 func main() {
 	flag.Parse()
-	fileContent, err := lib.Read(*fileName)
+	fileContentArray, err := lib.ReadCsvFile(*fileName)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("unable to open % v:: %v", *fileName, err)
 	}
-	qans, err := lib.CSVSplitter(fileContent)
+	qans, err := lib.NewQuestionAnswer(fileContentArray)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("invalid csv file :: %v", err)
 	}
 	points, err := lib.CheckQuestionAnswer(os.Stdin, qans)
 	if err != nil {

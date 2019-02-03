@@ -25,7 +25,7 @@ func TestCheckQuestionAnswer(t *testing.T) {
 				},
 			},
 			0,
-			"EOF",
+			"",
 		},
 		{
 			"validAnswer",

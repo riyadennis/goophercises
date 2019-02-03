@@ -1,10 +1,9 @@
 package lib
 
 import (
+	"encoding/csv"
 	"errors"
-	"io/ioutil"
 	"os"
-	"strings"
 )
 
 // QuestionAnswer holds question number, question and answer
@@ -13,37 +12,32 @@ type QuestionAnswer struct {
 	Question, Answer string
 }
 
-// Read reads and file and return its content
-func Read(fileName string) (string, error) {
+// ReadCsvFile reads csv file and return its content
+func ReadCsvFile(fileName string) ([][]string, error) {
 	fp, err := os.Open(fileName)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer fp.Close()
 
-	r, err := ioutil.ReadAll(fp)
-	if err != nil {
-		return "", err
-	}
-	return string(r), nil
+	reader := csv.NewReader(fp)
+	return reader.ReadAll()
 }
 
-// CSVSplitter gets csv string and creates an
+// NewQuestionAnswer gets csv string and creates an
 // array of struct with questions and answers.
-func CSVSplitter(csv string) ([]*QuestionAnswer, error) {
-	lines := strings.Split(csv, "\n")
+func NewQuestionAnswer(fileContent [][]string) ([]*QuestionAnswer, error) {
+	if fileContent == nil {
+		return nil, errors.New("invalid csv content")
+	}
 	var qans = []*QuestionAnswer{}
-	for lineNum, line := range lines {
+	for lineNum, line := range fileContent {
 		// we dont want to check empty lines
-		if line != "" {
-			qansArray := strings.Split(line, ",")
-			if len(qansArray) != 2 {
-				return nil, errors.New("invalid line in csv")
-			}
+		if line != nil {
 			qans = append(qans, &QuestionAnswer{
 				Num:      lineNum + 1,
-				Question: qansArray[0],
-				Answer:   qansArray[1],
+				Question: line[0],
+				Answer:   line[1],
 			})
 		}
 	}

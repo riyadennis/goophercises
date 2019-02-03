@@ -26,12 +26,9 @@ func TestRead(t *testing.T) {
 
 	for _, sc := range scenarios {
 		t.Run(sc.name, func(t *testing.T) {
-			cnt, err := Read(sc.fileName)
-			if err == nil && cnt == "" {
-				t.Error("empty file")
-			}
-			if err != nil && err.Error() != sc.expectedErr {
-				t.Errorf("error got %v, want %v", err.Error(), sc.expectedErr)
+			_, err := ReadCsvFile(sc.fileName)
+			if err != nil {
+				checkErr(t, err, sc.expectedErr)
 			}
 		})
 	}
@@ -40,13 +37,16 @@ func TestRead(t *testing.T) {
 func TestCSVSplitter(t *testing.T) {
 	scenarios := []struct {
 		name         string
-		csvString    string
+		csvString    [][]string
 		expectedErr  string
 		expectedQans []*QuestionAnswer
 	}{
 		{
 			"validCSV",
-			"q1,a1\nq2,a2\n",
+			[][]string{
+				{"q1", "a1"},
+				{"q2", "a2"},
+			},
 			"",
 			[]*QuestionAnswer{
 				{
@@ -63,14 +63,14 @@ func TestCSVSplitter(t *testing.T) {
 		},
 		{
 			"inValidCSV",
-			"q1\nq2,a2\n",
-			"invalid line in csv",
+			nil,
+			"invalid csv content",
 			nil,
 		},
 	}
 	for _, sc := range scenarios {
 		t.Run(sc.name, func(t *testing.T) {
-			actualQns, err := CSVSplitter(sc.csvString)
+			actualQns, err := NewQuestionAnswer(sc.csvString)
 			if err != nil {
 				if err.Error() != sc.expectedErr {
 					t.Errorf("error wanted %v, got %v", err.Error(), sc.expectedErr)
