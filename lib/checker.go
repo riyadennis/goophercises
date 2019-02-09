@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"strings"
 	"time"
 )
 
@@ -25,7 +26,7 @@ func CheckQuestionAnswer(input io.Reader, qans []*QuestionAnswer, timeLimit int)
 		case <-timer.C:
 			return points, nil
 		case answer := <-answerCh:
-			if answer != q.Answer {
+			if strings.TrimSpace(answer) != q.Answer {
 				fmt.Printf("correct answer:%v \n", q.Answer)
 			}
 			points++
