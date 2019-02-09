@@ -4,22 +4,31 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"strings"
+	"time"
 )
 
 // CheckQuestionAnswer displays questions to the user to answer
-func CheckQuestionAnswer(input io.Reader, qans []*QuestionAnswer) (int, error) {
-	points := len(qans)
+func CheckQuestionAnswer(input io.Reader, qans []*QuestionAnswer, timeLimit int) (int, error) {
+	points := 0
 	reader := bufio.NewReader(input)
+	timer := time.NewTimer(time.Duration(timeLimit) * time.Second)
 	for _, q := range qans {
 		fmt.Printf("%d) %s \n", q.Num, q.Question)
-		answer, _, err := reader.ReadLine()
-		if err != nil {
-			return 0, err
-		}
-		if strings.TrimSpace(string(answer)) != q.Answer {
-			points--
-			fmt.Printf("correct answer:%v \n", q.Answer)
+		answerCh := make(chan string)
+		go func() {
+			answer, _, err := reader.ReadLine()
+			if err == nil {
+				answerCh <- string(answer)
+			}
+		}()
+		select {
+		case <-timer.C:
+			return points, nil
+		case answer := <-answerCh:
+			if answer != q.Answer {
+				fmt.Printf("correct answer:%v \n", q.Answer)
+			}
+			points++
 		}
 	}
 	return points, nil

@@ -9,9 +9,15 @@ import (
 	"github.com/riyadennis/goophercises/lib"
 )
 
-var fileName = flag.String("fileName",
-	"data/problems.csv",
-	"name of the file that has your quiz contents",
+var (
+	fileName = flag.String(
+		"fileName",
+		"data/problems.csv",
+		"name of the file that has your quiz contents")
+	timeLimit = flag.Int(
+		"timelimit",
+		30,
+		"time limit for the quiz")
 )
 
 func main() {
@@ -24,9 +30,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("invalid csv file :: %v", err)
 	}
-	points, err := lib.CheckQuestionAnswer(os.Stdin, qans)
+
+	points, err := lib.CheckQuestionAnswer(os.Stdin, qans, *timeLimit)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	fmt.Printf("you got %v points", points)
 }

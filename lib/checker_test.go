@@ -46,6 +46,7 @@ func TestCheckQuestionAnswer(t *testing.T) {
 			points, err := CheckQuestionAnswer(
 				scenario.input,
 				scenario.questionAnswers,
+				0,
 			)
 			if points != scenario.expectedPoints {
 				t.Errorf("points wanted %v, got %v", points, scenario.expectedPoints)
