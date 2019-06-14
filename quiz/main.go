@@ -5,14 +5,13 @@ import (
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/riyadennis/goophercises/lib"
+	"github.com/riyadennis/goophercises/quiz/lib"
 )
 
 var (
 	fileName = flag.String(
 		"fileName",
-		"data/problems.csv",
+		"/quiz/data/problems.csv",
 		"name of the file that has your quiz contents")
 	timeLimit = flag.Int(
 		"timelimit",
@@ -22,7 +21,11 @@ var (
 
 func main() {
 	flag.Parse()
-	fileContentArray, err := lib.ReadCsvFile(*fileName)
+	vpwd, err  := os.Getwd()
+	if err != nil {
+		log.Fatalf("unable to directory %v", err)
+	}
+	fileContentArray, err := lib.ReadCsvFile(vpwd+*fileName)
 	if err != nil {
 		log.Fatalf("unable to open % v:: %v", *fileName, err)
 	}
