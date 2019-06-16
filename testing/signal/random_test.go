@@ -1,6 +1,8 @@
 package signal
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"net/http/httptest"
@@ -34,5 +36,25 @@ func TestHandler(t *testing.T) {
 	resp := reader.Result()
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("Handler() response %v", resp.StatusCode)
+	}
+	contentType := resp.Header.Get("Content-Type")
+	if contentType != "application/json" {
+		t.Errorf("Handler() Content-Type = %v", contentType)
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Errorf("ioutil.ReadAll err %v", err)
+	}
+	p := &Person{}
+	err = json.Unmarshal(data, p)
+	if err != nil {
+		t.Errorf("json.Unmarshal err %v", err)
+	}
+	if p.Name != "Sam" {
+		t.Errorf("name got %v, want %v", "Sam", p.Name)
+	}
+	if p.Address != "128-138 High Road" {
+		t.Errorf("address got %v, want %v", "128-138 High Road", p.Address)
 	}
 }
