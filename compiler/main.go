@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/prometheus/common/log"
+	"go/ast"
+	"go/parser"
 	scanner2 "go/scanner"
 	"go/token"
 	"io/ioutil"
@@ -10,16 +12,27 @@ import (
 
 func main(){
 	scan("../quiz/main.go")
+	_, cont := fileSet("../quiz/main.go")
+	fileSet := token.NewFileSet()
+	af, err := parser.ParseFile(fileSet, "test.go", cont, 0)
+	if err != nil {
+		log.Errorf("unable to parse file :: %v", err)
+	}
+	ast.Print(fileSet, af)
 }
 
-func scan(fileName string){
-	var scanner scanner2.Scanner
+func fileSet(fileName string) (*token.File, []byte){
 	fc, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.Errorf("unable tp open the file :: %v", err)
 	}
 	fileSet := token.NewFileSet()
-	file := fileSet.AddFile("test.go", fileSet.Base(), len(fc))
+	return fileSet.AddFile("test.go", fileSet.Base(), len(fc)), fc
+}
+
+func scan(fileName string){
+	var scanner scanner2.Scanner
+	file, fc := fileSet(fileName)
 	scanner.Init(file, fc, nil, 0)
 	for {
 		pos, tok, str := scanner.Scan()
