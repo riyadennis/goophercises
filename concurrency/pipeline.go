@@ -2,13 +2,16 @@ package main
 
 import "sync"
 
-func merge(ch ...<-chan int) <-chan int{
+func merge(done <-chan struct{},ch ...<-chan int) <-chan int{
 	var wg sync.WaitGroup
 	out := make(chan int)
 
 	output := func(c <-chan int){
 		for n := range c{
-			out<-n
+			select {
+				case out<-n:
+				case <-done:
+			}
 		}
 		wg.Done()
 	}
