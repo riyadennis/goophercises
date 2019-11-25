@@ -17,7 +17,7 @@ type Person struct {
 	Email   string
 }
 
-// Handler will take a http response handler and will write the contnent
+// Handler will take a http response handler and will write the content
 // into it
 func Handler(w http.ResponseWriter, r *http.Request) {
 	p := &Person{
