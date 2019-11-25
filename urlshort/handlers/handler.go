@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"net/http"
 	"fmt"
+	"net/http"
 )
 
 // MapHandler will return an http.HandlerFunc (which also
@@ -12,8 +12,8 @@ import (
 // If the path is not provided in the map, then the fallback
 // http.Handler will be called instead.
 func MapHandler(pathsToUrls map[string]string, fallback http.Handler) http.HandlerFunc {
-	for path, url := range pathsToUrls{
-		http.HandleFunc(path, func(w http.ResponseWriter, req *http.Request){
+	for path, url := range pathsToUrls {
+		http.HandleFunc(path, func(w http.ResponseWriter, req *http.Request) {
 			fmt.Print("hlll")
 		})
 	}

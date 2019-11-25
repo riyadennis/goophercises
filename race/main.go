@@ -8,7 +8,7 @@ import (
 
 var balance = 100
 
-func main(){
+func main() {
 	var wt sync.WaitGroup
 	wt.Add(3)
 	go debit(10, &wt)
@@ -18,8 +18,7 @@ func main(){
 	fmt.Printf("balance %v", balance)
 }
 
-
-func debit(amount int, wt *sync.WaitGroup){
+func debit(amount int, wt *sync.WaitGroup) {
 	b := balance
 	b -= amount
 	balance = b

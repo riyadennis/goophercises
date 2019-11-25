@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+
 	"github.com/riyadennis/goophercises/quiz/lib"
 )
 
@@ -21,11 +22,11 @@ var (
 
 func main() {
 	flag.Parse()
-	vpwd, err  := os.Getwd()
+	vpwd, err := os.Getwd()
 	if err != nil {
 		log.Fatalf("unable to directory %v", err)
 	}
-	fileContentArray, err := lib.ReadCsvFile(vpwd+*fileName)
+	fileContentArray, err := lib.ReadCsvFile(vpwd + *fileName)
 	if err != nil {
 		log.Fatalf("unable to open % v:: %v", *fileName, err)
 	}

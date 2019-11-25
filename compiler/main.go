@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/prometheus/common/log"
 	"go/ast"
 	"go/parser"
 	scanner2 "go/scanner"
 	"go/token"
 	"io/ioutil"
+
+	"github.com/prometheus/common/log"
 )
 
-func main(){
+func main() {
 	scan("../quiz/main.go")
 	_, cont := fileSet("../quiz/main.go")
 	fileSet := token.NewFileSet()
@@ -21,7 +22,7 @@ func main(){
 	ast.Print(fileSet, af)
 }
 
-func fileSet(fileName string) (*token.File, []byte){
+func fileSet(fileName string) (*token.File, []byte) {
 	fc, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.Errorf("unable tp open the file :: %v", err)
@@ -30,16 +31,15 @@ func fileSet(fileName string) (*token.File, []byte){
 	return fileSet.AddFile("test.go", fileSet.Base(), len(fc)), fc
 }
 
-func scan(fileName string){
+func scan(fileName string) {
 	var scanner scanner2.Scanner
 	file, fc := fileSet(fileName)
 	scanner.Init(file, fc, nil, 0)
 	for {
 		pos, tok, str := scanner.Scan()
 		fmt.Printf("%v-%v-%v", pos, tok, str)
-		if tok == token.EOF{
+		if tok == token.EOF {
 			break
 		}
 	}
 }
-
