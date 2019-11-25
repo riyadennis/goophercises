@@ -12,6 +12,8 @@ func main(){
 		fmt.Printf("squares %v\n", c)
 	}
 
-	//waitGroup()
+	waitGroup()
+
+	jobs()
 }
 

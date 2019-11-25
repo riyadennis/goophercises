@@ -1,9 +1,11 @@
 package main
 
 import "github.com/nsqio/go-nsq"
+
 type handler struct {}
 func consumer(){
 	config := nsq.NewConfig()
+	config.MaxInFlight = 1
 	consumer, err := nsq.NewConsumer("events", "stats", config)
 	if err != nil{
 		panic(err)
