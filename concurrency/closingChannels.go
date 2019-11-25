@@ -7,7 +7,6 @@ func jobs(){
 	done := make(chan bool)
 	go func(){
 		for{
-
 			job, ok := <-j
 			if ok{
 				fmt.Printf("Got job %s \n", job)
