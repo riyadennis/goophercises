@@ -13,7 +13,7 @@ type data struct {
 	name string
 }
 
-func fetchData(filenames []string) {
+func fetchFiles(filenames []string) {
 	ch := make(chan map[string]*data)
 	var wg sync.WaitGroup
 	wg.Add(1)

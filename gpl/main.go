@@ -3,5 +3,5 @@ package main
 import "os"
 
 func main() {
-	fetchData(os.Args[1:])
+	fetchFiles(os.Args[1:])
 }
