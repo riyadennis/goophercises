@@ -1,0 +1,16 @@
+A map is a reference to the dat a st ruc ture cre ate d by make. Whenamap is passed toafunction, the function receivesa copy of the reference, so any changes the cal le d func tion makes to
+the underly ing dat a st ruc ture will be visible through the cal ler’s map reference too. In our
+example, the values inserted int o the counts map by countLines are seen by main.
+The versions of dup ab ove operate in a ‘‘st reaming’’ mo de in which inp ut is read and bro ken
+into lines as needed, so in princip le these programs can handle an arbit rar y amount of inp ut.
+An alt ernat ive appro ach is to read the ent ire inp ut int o memory in one big gulp, split it int o
+lines all at once, then pro cess the lines. The fol low ing version, dup3, operates in that fashion.
+It int roduces the function ReadFile (f rom the io/ioutil package), which reads the ent ire
+cont ents of a name d file, and strings.Split, which splitsastr ing int o a slice of subst rings.
+(Split is the opp osite of strings.Join, which we saw earlier.)
+We’ve simplified dup3 some what. First, it only reads name d files, not the stand ard inp ut, since
+ReadFile re quires a file name argument. Secon d, we mov ed the count ing of the lines back
+ReadFile re quires a file name argument. Secon d, we mov ed the count ing of the lines back
+into main, since it is now needed in only one place.
+into main, since it is now needed in only one place.
+into main, since it is now needed in only one place.
