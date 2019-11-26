@@ -2,6 +2,6 @@ package main
 
 import "os"
 
-func main(){
+func main() {
 	fetchData(os.Args[1:])
 }
