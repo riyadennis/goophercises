@@ -3,27 +3,55 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"net"
 	"os"
 )
 
-
-func main(){
+func main() {
 	conn, err := net.Dial("tcp", ":8085")
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 	defer conn.Close()
-	for {
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Print(">> ")
-		text, _ := reader.ReadString('\n')
-		fmt.Fprintf(conn, text+"\n")
+	userInput(conn)
+	checkResponse(conn)
+}
 
-		message, err := bufio.NewReader(conn).ReadString('\n')
-		if err != nil{
-			panic(err)
+func userInput(conn net.Conn) {
+	for {
+		fmt.Print(">>")
+		userInput, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		switch err {
+		case nil:
+			fmt.Fprintf(conn, "%s\n", userInput)
+		case io.EOF:
+			os.Exit(0)
+		default:
+			fmt.Fprintf(conn, "ERROR")
+			os.Exit(1)
 		}
-		fmt.Printf("got message %s", message)
+	}
+}
+
+func checkResponse(conn net.Conn) {
+	for {
+		response, err := bufio.NewReader(conn).ReadString('\n')
+		switch err {
+		case nil:
+			switch response {
+			case "SUCCESS\n":
+				fmt.Println("communication successful")
+				break
+			default:
+				fmt.Println("communication not successful")
+				break
+			}
+		case io.EOF:
+			os.Exit(0)
+		default:
+			fmt.Fprintf(conn, "ERROR")
+			os.Exit(1)
+		}
 	}
 }

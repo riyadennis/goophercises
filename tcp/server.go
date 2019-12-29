@@ -5,31 +5,34 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"os"
 )
 
-func main(){
+func main() {
 	l, err := net.Listen("tcp", ":8085")
-	if err != nil{
-		panic(err)
+	if err != nil {
+		fmt.Println("ERROR")
+		os.Exit(1)
 	}
 	defer l.Close()
-
-	for{
-		conn, err := l.Accept()
-		if err != nil{
-			panic(err)
+	conn, err := l.Accept()
+	if err != nil {
+		fmt.Println("ERROR")
+		os.Exit(1)
+	}
+	for {
+		str, err := bufio.NewReader(conn).ReadString('\n')
+		switch err {
+		case nil:
+			fmt.Printf("from client >> %s", str)
+			fmt.Fprint(conn, "SUCCESS\n")
+			break
+		case io.EOF:
+			fmt.Fprint(conn, "SUCCESS\n")
+			os.Exit(0)
+		default:
+			fmt.Fprint(conn, "ERROR\n")
+			os.Exit(1)
 		}
-		go func(){
-			str, err := bufio.NewReader(conn).ReadString('\n')
-			if err != nil{
-				if err == io.EOF{
-					fmt.Println("client sent exit message")
-					return
-				}
-				panic(err)
-				return
-			}
-			fmt.Printf("got -> %s", str)
-		}()
 	}
 }
