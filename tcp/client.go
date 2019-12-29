@@ -41,7 +41,6 @@ func checkResponse(conn net.Conn) {
 	response, err := bufio.NewReader(conn).ReadString('\n')
 	switch err {
 	case nil:
-		fmt.Println(response)
 		switch response {
 		case "SUCCESS\n":
 			fmt.Println("communication successful")
